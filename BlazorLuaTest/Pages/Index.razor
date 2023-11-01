@@ -31,6 +31,8 @@
         box-sizing: border-box;
         font-family: Consolas;
         white-space: pre-wrap;
+        overflow: auto;
+        max-height:100%;
     }
 
     #bottomPanel{
@@ -68,8 +70,8 @@
     setTimeout(() => {
         editor = ace.edit("editor");
         editor.setTheme("ace/theme/twilight");
-        var luaMode = ace.require("ace/mode/lua").Mode;
-        editor.session.setMode(new luaMode());
+        // var luaMode = ace.require("ace/mode/lua").Mode;
+        // editor.session.setMode(new luaMode());
 
         window.getAceContents = () => {
             return editor.getValue();
