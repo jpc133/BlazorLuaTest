@@ -6,8 +6,7 @@ This experiment was spurred on by a desire to test the potential for using Lua i
 
 ## Does it work?
 Yes.
-
-<Insert video of it working!>
+![Video demo showing a print to the screen and then a loop of prints to the screen](demo.webm)
 
 ## Getting this running
 You should just be able to clone this and run in Visual Studio 17.7.6 or higher, it should have no dependancies that aren't covered by nuget.
