@@ -6,6 +6,7 @@ This experiment was spurred on by a desire to test the potential for using Lua i
 
 ## Does it work?
 Yes.
+
 ![Video demo showing a print to the screen and then a loop of prints to the screen](demo.gif)
 
 ## Getting this running
