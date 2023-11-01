@@ -1,0 +1,102 @@
+﻿@page "/"
+@using Neo.IronLua;
+@inject IJSRuntime JS
+
+<style>
+    body{
+        display: block;
+        padding: 0px;
+        margin: 0px;
+        border: 0px;
+        overflow: hidden;
+    }
+
+    #container{
+        display: flex;
+        width:100vw;
+        height:95vh;
+    }
+
+    #editor{
+     width: 50vw;
+     height: 100%;
+    }
+
+    #output{
+        width: 50vw;
+        height: 100%;
+        background-color:black;
+        color: white;
+        padding:1em;
+        box-sizing: border-box;
+        font-family: Consolas;
+        white-space: pre-wrap;
+    }
+
+    #bottomPanel{
+        height: 5vh;
+        width: 100vw;
+        max-height: 5vh;
+        max-width: 100vw;
+    }
+
+    #runBtn{
+        display: block;
+        margin: 0.5vh auto;
+        width: 5vw;
+        padding: 1vh;
+    }
+</style>
+
+<script src="lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/ace/mode-lua.js" type="text/javascript" charset="utf-8"></script>
+
+
+<div id="container">
+    <div id="editor">print('Hello world!')</div>
+    <div id="output">@outputText</div>
+</div>
+
+<div id="bottomPanel">
+    <button id="runBtn" @onclick="RunCode">Run</button>
+</div>
+
+
+<script>
+    var editor;
+    setTimeout(() => {
+        editor = ace.edit("editor");
+        editor.setTheme("ace/theme/twilight");
+        var luaMode = ace.require("ace/mode/lua").Mode;
+        editor.session.setMode(new luaMode());
+
+        window.getAceContents = () => {
+            return editor.getValue();
+        };
+    }, 1000);
+</script>
+
+@code{
+    static string outputText = "";
+
+    async Task RunCode()
+    {
+        outputText = "";
+        string luaCode = await JS.InvokeAsync<string>("getAceContents");
+        using (Lua lua = new Lua()) // Create the Lua script engine
+        {
+            dynamic env = lua.CreateEnvironment(); // Create a environment
+            env.print = new Action<object[]>(Print);
+            env.dochunk(luaCode, "test.lua");
+        }
+    }
+
+    private static void Print(object[] texts)
+    {
+        foreach (object o in texts)
+        {
+            outputText += o.ToString() + "\n";
+        }
+    }
+}
